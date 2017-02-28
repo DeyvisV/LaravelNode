@@ -43,13 +43,55 @@
         @if (Auth::check() && Auth::id() != $item->id)
             <div class="col-md-6">
                 <div class="form-group">
+                    <label>Chat</label>
+                </div>
+                <div class="form-group">
                     <div id="item-chat"></div>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="message">
+                    <label>Escriba su Mensaje</label>
+                    <input type="text" class="form-control" name="message" id="message">
                 </div>
             </div>
         @endif
     </div>
 
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="{{ asset('js/chat.js') }}"></script>
+    <script>
+        $('#message').on('keyup', function(event) {
+            event.preventDefault();
+
+            if (event.which == 13) {
+                var message = this.value;
+                console.log(this.value);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+                $.ajax({
+                  type: "POST",
+                  url: '{{ route('chat', ['itemId' => $item->id]) }}',
+                  data: {message: message},
+                  //success: success,
+                  dataType: 'json'
+                });
+            }
+        });
+    </script>
+    <script>
+        //var socket = new io.connect('http://127.0.0.1:3000/'); OLD
+        //var socket = new io("ws://127.0.0.1:3000/"); //NEW
+        var socket = io('http://localhost::3000');
+
+        socket.on('chat.item', function (data) {
+            //Do something with data
+            var data = JSON.parse(data)
+            console.log('Mensaje: ', data.mensaje);
+        });
+    </script>
 @endsection

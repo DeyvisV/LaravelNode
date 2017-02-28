@@ -7,3 +7,6 @@
 Homestead.json
 Homestead.yaml
 .env
+
+/chat/node_modules
+/chat/vendor

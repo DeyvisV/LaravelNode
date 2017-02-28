@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Redis;
 use Auth;
 use App\Item;
 use Illuminate\Http\Request;
@@ -103,6 +104,21 @@ class ItemController extends Controller {
 		$item->delete();
 
 		return redirect()->route('items.index')->with('message', 'Item deleted successfully.');
+	}
+
+	public function chat(Request $request, $itemId)
+	{
+		$message = $request->input('message');
+		$item = $item = Item::findOrFail($itemId);
+		$channel = 'chat.item';
+		$room = str_slug($item->name, '-');
+
+		$data = [
+			'room' => $room,
+			'message' => $message
+		];
+
+		Redis::publish($room, json_encode($data));
 	}
 
 }

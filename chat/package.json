@@ -1,0 +1,17 @@
+{
+  "name": "chat-item",
+  "version": "0.0.1",
+  "description": "multi item-room chat connect to laravel",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Deyvis Valdez Huanca <deyvis.vh@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1",
+    "ioredis": "^2.5.0",
+    "redis": "^2.6.5",
+    "socket.io": "^1.7.3"
+  }
+}

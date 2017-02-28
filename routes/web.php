@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource("items","ItemController"); 
+Route::post('items/{itemId}/chat', ['as' => 'chat', 'uses' => 'ItemController@chat']);
 
 Auth::routes();
 
