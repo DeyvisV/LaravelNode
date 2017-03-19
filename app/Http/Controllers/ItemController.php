@@ -118,7 +118,8 @@ class ItemController extends Controller {
 			'message' => $message
 		];
 
-		Redis::publish($room, json_encode($data));
+		//$redis = Redis::connection();
+		Redis::publish('chat.item', json_encode($data));
 	}
 
 }

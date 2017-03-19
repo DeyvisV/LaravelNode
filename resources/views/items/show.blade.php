@@ -40,7 +40,7 @@
             <a class="btn btn-link" href="{{ route('items.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
 
         </div>
-        @if (Auth::check() && Auth::id() != $item->id)
+        @if (Auth::check() && Auth::id() != $item->user_id)
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Chat</label>
@@ -84,14 +84,24 @@
         });
     </script>
     <script>
-        //var socket = new io.connect('http://127.0.0.1:3000/'); OLD
-        //var socket = new io("ws://127.0.0.1:3000/"); //NEW
-        var socket = io('http://localhost::3000');
+        var socket = io.connect('http://localhost:3000', { 'forceNew': true });
 
-        socket.on('chat.item', function (data) {
-            //Do something with data
-            var data = JSON.parse(data)
-            console.log('Mensaje: ', data.mensaje);
+        var room = '{{ str_slug($item->name, '-') }}';
+        /*
+        socket.on('connect', function() {
+           // Connected, let's sign-up for to receive messages for this room
+           socket.emit('room', room);
+        });*/
+
+        socket.emit('create', room);
+
+        socket.on('message', function(data) {  
+            console.log(data);
+        });
+
+
+        socket.on(room, function (data) {
+            console.log('Mensaje: ', data);
         });
     </script>
 @endsection
